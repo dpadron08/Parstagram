@@ -29,12 +29,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /*
+        // If user was already logged in, go ahead and proceed
+        // for log in session persistence
         if (ParseUser.getCurrentUser() != null) {
             goMainActivity();
         }
-
-         */
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
