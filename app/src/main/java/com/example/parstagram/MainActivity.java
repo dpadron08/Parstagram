@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSubmit;
     Button btnLogout;
     private RecyclerView rvPosts;
+    private SwipeRefreshLayout swipeContainer;
 
     private File photoFile;
     public String photoFileName = "photo.png";
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         ivPostImage = findViewById(R.id.ivPostImage);
         btnSubmit = findViewById(R.id.btnSubmit);
         rvPosts = findViewById(R.id.rvPosts);
+        swipeContainer = findViewById(R.id.swipeContainer);
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
@@ -109,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 launchCamera();
+            }
+        });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryPosts();
             }
         });
     }
@@ -210,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void queryPosts() {
+        // clear all existing posts before repopulating, might make infinite scrolling fail
+        adapter.clear();
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         // include data referred by user key
@@ -235,18 +247,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // save received posts to list and notify adapter of new data
+                //posts.clear();
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
         });
     }
-
-
-
-
-
-
-
 
 
 
