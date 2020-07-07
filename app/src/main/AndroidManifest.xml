@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".ParseApplication">
+        android:name=".ParseApplication"
+        android:usesCleartextTraffic="true">
 
         <provider
             android:name="androidx.core.content.FileProvider"

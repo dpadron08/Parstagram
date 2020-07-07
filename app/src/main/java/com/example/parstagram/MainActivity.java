@@ -3,6 +3,8 @@ package com.example.parstagram;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,6 +31,7 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,11 +43,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageView ivPostImage;
     private Button btnSubmit;
     Button btnLogout;
+    private RecyclerView rvPosts;
 
     private File photoFile;
     public String photoFileName = "photo.png";
 
-
+    protected PostsAdapter adapter;
+    protected List<Post> allPosts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,18 @@ public class MainActivity extends AppCompatActivity {
         btnCaptureImage = findViewById(R.id.btnCaptureImage);
         ivPostImage = findViewById(R.id.ivPostImage);
         btnSubmit = findViewById(R.id.btnSubmit);
+        rvPosts = findViewById(R.id.rvPosts);
+
+        // initialize the array that will hold posts and create a PostsAdapter
+        allPosts = new ArrayList<>();
+        adapter = new PostsAdapter(this, allPosts);
+
+        // set the adapter on the recycler view
+        rvPosts.setAdapter(adapter);
+        // set the layout manager on the recycler view
+        rvPosts.setLayoutManager(new LinearLayoutManager(this));
+        // query posts from Parstagram
+        queryPosts();
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,23 +210,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void queryPosts() {
-        // Specify which class to query
+        // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        // include data referred by user key
         query.include(Post.KEY_USER);
+        // limit query to latest 20 items
+        query.setLimit(20);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder(Post.KEY_CREATED_KEY);
+        // start an asynchronous call for posts
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
-                if (e!= null) {
-                    Log.e(TAG, "Issue with getting pots");
+                // check for errors
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
                     return;
                 }
+
+                // for debugging purposes let's print every post description to logcat
                 for (Post post : posts) {
-                    Log.i(TAG, "Post: " + post.getDescription() + " username: " + post.getUser().getUsername());
+                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername()
+                    + " Image URL: "+ post.getImage().getUrl());
                 }
 
+                // save received posts to list and notify adapter of new data
+                allPosts.addAll(posts);
+                adapter.notifyDataSetChanged();
             }
         });
     }
+
+
+
+
+
+
+
+
+
+
     // Scale and maintain aspect ratio given a desired width
     // BitmapScaler.scaleToFitWidth(bitmap, 100);
     public static Bitmap scaleToFitWidth(Bitmap b, int width)
