@@ -6,4 +6,7 @@
     <color name="instagramWhite">#FEFEFE</color>
     <color name="instagramWhiteDarker">#F7F7F7</color>
     <color name="instagramGray">#7D7D7D</color>
+    <color name="instagramBlue">#1080F3</color>
+    <color name="instagramGreen">#43BC2C</color>
+
 </resources>
