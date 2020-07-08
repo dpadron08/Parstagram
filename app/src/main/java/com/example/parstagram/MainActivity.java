@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.parstagram.fragments.ComposeFragment;
 import com.example.parstagram.fragments.PostsFragment;
+import com.example.parstagram.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -121,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_profile:
                         Toast.makeText(MainActivity.this, "profile", Toast.LENGTH_SHORT).show();
-                        fragment = new ComposeFragment();
+                        fragment = new ProfileFragment();
                     default:
-                        fragment = new ComposeFragment(); // TODO update fragment
+                        fragment = new ProfileFragment(); // TODO update fragment
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
