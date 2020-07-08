@@ -1,10 +1,12 @@
 package com.example.parstagram;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -18,6 +20,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -26,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnLogout;
     private RecyclerView rvPosts;
     private SwipeRefreshLayout swipeContainer;
+    private BottomNavigationView bottomNavigationView;
 
     Toolbar toolbar;
     ImageView ivBigLogo;
@@ -65,16 +70,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
-        ActionBar actionBar = getSupportActionBar();
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_instagram_brand);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        actionBar.setTitle("");
-
-         */
-        //getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.ic_instagram_brand_two));
-
         btnLogout = findViewById(R.id.btnLogout);
         etDescription = findViewById(R.id.etDescription);
         btnCaptureImage = findViewById(R.id.btnCaptureImage);
@@ -89,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("");
         ivBigLogo.setImageResource(R.drawable.finalinsta);
+
+        // bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
+
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
@@ -143,6 +142,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 queryPosts();
+            }
+        });
+
+
+        // bottom navigation pressed
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Fragment fragment;
+                switch (menuItem.getItemId()) {
+                    case R.id.action_home:
+                        Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_compose:
+                        Toast.makeText(MainActivity.this, "compose", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_profile:
+                        Toast.makeText(MainActivity.this, "profile", Toast.LENGTH_SHORT).show();
+                    default:
+
+                        break;
+                }
+
+                return true;
             }
         });
     }
