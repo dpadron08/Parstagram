@@ -10,6 +10,14 @@
     tools:context=".LoginActivity"
     >
 
+    <ImageView
+        android:id="@+id/ivBigLogo"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:src="@drawable/finalinsta"
+        tools:srcCompat="@drawable/finalinsta" />
+
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
