@@ -3,4 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="instagramWhite">#FEFEFE</color>
+    <color name="instagramWhiteDarker">#F7F7F7</color>
+    <color name="instagramGray">#7D7D7D</color>
 </resources>

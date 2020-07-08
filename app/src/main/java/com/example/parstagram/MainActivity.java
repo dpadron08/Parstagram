@@ -1,7 +1,9 @@
 package com.example.parstagram;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -22,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvPosts;
     private SwipeRefreshLayout swipeContainer;
 
+    Toolbar toolbar;
+    ImageView ivBigLogo;
+
     private File photoFile;
     public String photoFileName = "photo.png";
 
@@ -58,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
+        ActionBar actionBar = getSupportActionBar();
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_instagram_brand);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        actionBar.setTitle("");
+
+         */
+        //getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.ic_instagram_brand_two));
+
         btnLogout = findViewById(R.id.btnLogout);
         etDescription = findViewById(R.id.etDescription);
         btnCaptureImage = findViewById(R.id.btnCaptureImage);
@@ -65,6 +82,13 @@ public class MainActivity extends AppCompatActivity {
         btnSubmit = findViewById(R.id.btnSubmit);
         rvPosts = findViewById(R.id.rvPosts);
         swipeContainer = findViewById(R.id.swipeContainer);
+        toolbar = findViewById(R.id.toolbar);
+        ivBigLogo = findViewById(R.id.ivBigLogo);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("");
+        ivBigLogo.setImageResource(R.drawable.finalinsta);
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
@@ -255,7 +279,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        return true;
+    }
 
     // Scale and maintain aspect ratio given a desired width
     // BitmapScaler.scaleToFitWidth(bitmap, 100);
