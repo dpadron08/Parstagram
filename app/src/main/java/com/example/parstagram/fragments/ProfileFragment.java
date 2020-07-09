@@ -3,7 +3,6 @@ package com.example.parstagram.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -29,13 +27,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.parstagram.LoginActivity;
-import com.example.parstagram.MainActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostPreviewAdapter;
-import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -117,9 +112,10 @@ public class ProfileFragment extends Fragment {
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
         // set the layout manager on the recycler view
-        /*rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));*/
+        //rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvPosts.setLayoutManager(new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false));
-        //rvPosts.setPadding(0, 0 , 0, 0);
+        //rvPosts.addItemDecoration(new GridSpacingItemDecoration(3, 20, false));
+        //rvPosts.setPadding(0, -30 , 0, 0);
         // query posts from Parstagram
 
         btnLogout.setOnClickListener(new View.OnClickListener() {

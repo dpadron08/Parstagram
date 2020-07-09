@@ -32,7 +32,7 @@ public class PostPreviewAdapter extends RecyclerView.Adapter<PostPreviewAdapter.
     @NonNull
     @Override
     public PostPreviewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_post_image, parent, false);
         return new PostPreviewAdapter.ViewHolder(view);
     }
 
