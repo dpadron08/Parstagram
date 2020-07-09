@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/ivProfilePic"
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:layout_margin="12dp"
@@ -31,7 +31,7 @@
             android:layout_marginTop="24dp"
             android:text="Usernamehere"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Username here" />
 
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="Edit Picture"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
             app:layout_constraintTop_toBottomOf="@+id/tvDisplayUsername" />
 
         <Button
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="Log Out"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
             app:layout_constraintTop_toBottomOf="@+id/btnEditProfilePicture" />
 
         <androidx.recyclerview.widget.RecyclerView
