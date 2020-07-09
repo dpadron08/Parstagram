@@ -97,15 +97,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     intent.putExtra("post", Parcels.wrap(post));
                     context.startActivity(intent);
 
-                    /*
-                    intent.putExtra("username", post.getUser().getUsername());
-                    intent.putExtra("timestamp", post.getCreatedAt());
-                    intent.putExtra("description", post.getDescription());
-                    intent.putExtra("imageUrl", post.getImage().getUrl());
-                    // show the activity
-                    context.startActivity(intent);
-                    */
-
                 }
             });
         }

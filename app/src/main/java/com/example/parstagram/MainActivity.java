@@ -53,24 +53,16 @@ public class MainActivity extends AppCompatActivity {
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
-    Button btnLogout;
-
     private BottomNavigationView bottomNavigationView;
 
     Toolbar toolbar;
     ImageView ivBigLogo;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        btnLogout = findViewById(R.id.btnLogout);
 
 
         toolbar = findViewById(R.id.toolbar);
@@ -84,26 +76,8 @@ public class MainActivity extends AppCompatActivity {
         // bottom navigation view
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
-
-
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ParseUser.logOut();
-                if (ParseUser.getCurrentUser() == null) {
-                    Log.i(TAG, "Successfully logged out");
-                }
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
         
         //queryPosts();
-
-
-
 
 
         // bottom navigation pressed

@@ -1,5 +1,6 @@
 package com.example.parstagram.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.parstagram.LoginActivity;
+import com.example.parstagram.MainActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
@@ -38,6 +42,7 @@ public class ProfileFragment extends Fragment {
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
 
+    Button btnLogout;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -57,6 +62,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        btnLogout = view.findViewById(R.id.btnLogout);
         rvPosts = view.findViewById(R.id.rvPosts);
         //swipeContainer = view.findViewById(R.id.swipeContainer);
 
@@ -70,6 +76,19 @@ public class ProfileFragment extends Fragment {
         /*rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));*/
         rvPosts.setLayoutManager(new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false));
         // query posts from Parstagram
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseUser.logOut();
+                if (ParseUser.getCurrentUser() == null) {
+                    Log.i(TAG, "Successfully logged out");
+                }
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
         /*
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
