@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.parstagram.MainActivity;
@@ -52,6 +53,8 @@ public class ComposeFragment extends Fragment {
 
     private File photoFile;
     public String photoFileName = "photo.png";
+
+    ProgressBar pbLoading;
 
 
     public ComposeFragment() {
@@ -91,6 +94,7 @@ public class ComposeFragment extends Fragment {
                     Toast.makeText(getContext(), "There is no image", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                pbLoading.setVisibility(View.VISIBLE);
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(description, currentUser, photoFile);
             }
@@ -102,6 +106,9 @@ public class ComposeFragment extends Fragment {
                 launchCamera();
             }
         });
+
+        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.INVISIBLE);
     }
 
 
@@ -201,6 +208,8 @@ public class ComposeFragment extends Fragment {
                 Log.i(TAG, "Post was saved successfully");
                 etDescription.setText("");
                 ivPostImage.setImageResource(0);
+                pbLoading.setVisibility(View.INVISIBLE);
+                Toast.makeText(getContext(), "Posted!", Toast.LENGTH_SHORT).show();
             }
         });
     }
