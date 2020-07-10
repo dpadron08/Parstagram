@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -80,25 +81,28 @@ public class MainActivity extends AppCompatActivity {
         //queryPosts();
 
 
+
         // bottom navigation pressed
-        bottomNavigationView.setOnNavigationItemSelectedListener(new   BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
                         Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
-                        fragment = new PostsFragment(); // TODO update fragment
+                        fragment = new PostsFragment();
+
                         break;
                     case R.id.action_compose:
                         Toast.makeText(MainActivity.this, "compose", Toast.LENGTH_SHORT).show();
                         fragment = new ComposeFragment();
+                        //menuItem.setIcon(R.drawable.instagram_compose_pressed);
                         break;
                     case R.id.action_profile:
                         Toast.makeText(MainActivity.this, "profile", Toast.LENGTH_SHORT).show();
                         fragment = new ProfileFragment();
                     default:
-                        fragment = new ProfileFragment(); // TODO update fragment
+                        fragment = new ProfileFragment();
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
