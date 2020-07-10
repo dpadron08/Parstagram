@@ -14,6 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
@@ -38,6 +41,8 @@ public class PostsFragment extends Fragment {
     protected List<Post> allPosts;
 
 
+
+
     public PostsFragment() {
         // Required empty public constructor
     }
@@ -53,6 +58,8 @@ public class PostsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         rvPosts = view.findViewById(R.id.rvPosts);
         swipeContainer = view.findViewById(R.id.swipeContainer);
 

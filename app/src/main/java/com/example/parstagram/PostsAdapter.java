@@ -2,10 +2,14 @@ package com.example.parstagram;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.net.ParseException;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,11 +19,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
@@ -67,6 +76,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivImage;
         private TextView tvDescription;
 
+        ImageView ivProfilePic;
+        TextView tvTimestamp;
+        Button btnLike;
+        Button btnComment;
+        Button btnSave;
+
         ConstraintLayout container;
 
         public ViewHolder(@NonNull View itemView) {
@@ -74,6 +89,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            btnLike = itemView.findViewById(R.id.btnLike);
+            btnComment = itemView.findViewById(R.id.btnComment);
+            btnSave = itemView.findViewById(R.id.btnSave);
 
             container = itemView.findViewById(R.id.container);
         }
@@ -86,6 +106,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivImage);
+            }
+
+            String date = ((Date) post.getCreatedAt()).toString();
+            //String relativeTimestamp = getRelativeTimeAgo( date );
+            tvTimestamp.setText(date);
+            ParseFile file  = post.getUser().getParseFile("profilePic");
+            if (file != null) {
+                int radius = 100;
+                int margin = 100;
+                Glide.with(context).load(file.getUrl())
+                        .transform(new CircleCrop())
+                        .into(ivProfilePic);
             }
 
             container.setOnClickListener(new View.OnClickListener() {
@@ -102,26 +134,23 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             });
         }
 
+        public String getRelativeTimeAgo(String rawJsonDate) {
+            String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+            //String twitterFormat = "yyyy-MM-ddTHH::mm:ss.SSS";
 
-       /* @Override
-        public void onClick(View view) {
-            Log.i("AAA", "Clicked");
-            // gets item position
-            int position = getAdapterPosition();
-            // make sure the position is valid, i.e. actually exists in the view
-            if (position != RecyclerView.NO_POSITION) {
-                // get the movie at the position, this won't work if the class is static
-                Post post = posts.get(position);
-                // create intent for the new activity
-                Intent intent = new Intent(context, PostDetailsActivity.class);
+            SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+            sf.setLenient(true);
 
-                intent.putExtra("username", post.getUser().getUsername());
-                intent.putExtra("timestamp", post.getCreatedAt());
-                intent.putExtra("description", post.getDescription());
-                intent.putExtra("imageUrl", post.getImage().getUrl());
-                // show the activity
-                context.startActivity(intent);
+            String relativeDate = "";
+            try {
+                long dateMillis = sf.parse(rawJsonDate).getTime();
+                relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+            } catch (ParseException | java.text.ParseException e) {
+                e.printStackTrace();
             }
-        }*/
+
+            return relativeDate;
+        }
     }
 }

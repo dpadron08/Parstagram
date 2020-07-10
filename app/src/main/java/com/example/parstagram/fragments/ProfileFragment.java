@@ -100,9 +100,6 @@ public class ProfileFragment extends Fragment {
         if (file != null) {
             Glide.with(getContext()).load(file.getUrl()).into(ivProfilePic);
         }
-        //String url = file.getUrl();
-        Log.i("ABC", "nade ut");
-
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
