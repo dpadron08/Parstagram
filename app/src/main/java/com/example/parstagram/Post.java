@@ -3,6 +3,8 @@ package com.example.parstagram;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseFileUtils;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import org.parceler.Parcel;
@@ -42,4 +44,22 @@ public class Post extends com.parse.ParseObject  {
     }
 
 
+    // for likes
+    public ParseRelation<ParseUser> getUsersFavoritedRelation() {
+        return getRelation("usersFavorited");
+    }
+
+    public void addUserFavorited(ParseUser user) {
+        getUsersFavoritedRelation().add(user);
+        saveInBackground();
+    }
+
+    public void removeUserFavorited(ParseUser user) {
+        getUsersFavoritedRelation().remove(user);
+        saveInBackground();
+    }
+    public ParseQuery getUserFavorited(ParseUser user) {
+        ParseQuery query = getUsersFavoritedRelation().getQuery();
+        return query;
+    }
 }

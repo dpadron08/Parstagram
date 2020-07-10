@@ -3,7 +3,6 @@ package com.example.parstagram;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
-import android.net.ParseException;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,10 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -84,6 +92,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         ConstraintLayout container;
 
+        // list of users that favorited this post
+        final ArrayList<ParseObject> usersFavoritedList = new ArrayList<>();
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUsername = itemView.findViewById(R.id.tvUsername);
@@ -132,8 +143,43 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
                 }
             });
-        }
 
+
+
+            btnLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("PostsAdapter", "Clicked Liked");
+                    //ParseQuery query = post.getUserFavorited(ParseUser.getCurrentUser());
+                    ParseRelation relation = post.getRelation("usersFavorited");
+                    ParseQuery query = relation.getQuery();
+                    // search for user in query
+                    query.findInBackground(new FindCallback() {
+                        @Override
+                        public void done(List objects, ParseException e) {
+                            Log.i("PostsAdapter", "Other done function getLikes");
+                        }
+
+                        @Override
+                        public void done(Object o, Throwable throwable) {
+                            ArrayList<ParseObject> obj = (ArrayList) o;
+                            usersFavoritedList.addAll(obj);
+                            //Log.i("PostsAdapter", "Attr : " + ((ParseUser)obj.get(1)).getUsername());
+
+                            /*
+                            for (ParseObject a : usersFavoritedList) {
+                                Log.i("PostsAdapter", "User liked " + ((ParseUser)a).getUsername());
+                            }
+                             */
+
+                        }
+                    });
+                }
+            });
+
+
+        }
+        /*
         public String getRelativeTimeAgo(String rawJsonDate) {
             String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
             //String twitterFormat = "yyyy-MM-ddTHH::mm:ss.SSS";
@@ -152,5 +198,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             return relativeDate;
         }
+
+         */
     }
 }
