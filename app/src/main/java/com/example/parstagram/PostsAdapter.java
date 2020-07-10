@@ -163,22 +163,85 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         @Override
                         public void done(Object o, Throwable throwable) {
                             ArrayList<ParseObject> obj = (ArrayList) o;
+                            usersFavoritedList.clear();
                             usersFavoritedList.addAll(obj);
                             //Log.i("PostsAdapter", "Attr : " + ((ParseUser)obj.get(1)).getUsername());
 
-                            /*
+
                             for (ParseObject a : usersFavoritedList) {
                                 Log.i("PostsAdapter", "User liked " + ((ParseUser)a).getUsername());
                             }
-                             */
+
+                            toggleLike(post, usersFavoritedList);
 
                         }
                     });
                 }
             });
 
+            styleLikeButtons(post);
 
         }
+
+        private void styleLikeButtons(final Post post) {
+            // color the like buttons depending on if user has liked post
+
+            ParseRelation relation = post.getRelation("usersFavorited");
+            ParseQuery query = relation.getQuery();
+
+            // list of users who favorited this post
+            final ArrayList<ParseObject> listOfUsersFavorited = new ArrayList<>();
+            // search for user in query
+            query.findInBackground(new FindCallback() {
+                @Override
+                public void done(List objects, ParseException e) {
+                    Log.i("PostsAdapter", "Other done function getLikes");
+                }
+
+                @Override
+                public void done(Object o, Throwable throwable) {
+                    ArrayList<ParseObject> obj = (ArrayList) o;
+                    listOfUsersFavorited.clear();
+                    listOfUsersFavorited.addAll(obj);
+                    //Log.i("PostsAdapter", "Attr : " + ((ParseUser)obj.get(1)).getUsername());
+
+                    // color buttons
+                    toggleLike(post, listOfUsersFavorited);
+                    /*
+                    for (ParseObject a : usersFavoritedList) {
+                        Log.i("PostsAdapter", "User liked " + ((ParseUser)a).getUsername());
+                    }
+                     */
+                }
+            });
+        }
+
+        private void toggleLike(Post post, ArrayList<ParseObject> listUsers) {
+            boolean userFoundInList = false;
+            for (ParseObject parseObject : listUsers) {
+                if (  ((ParseUser)parseObject).getObjectId().equals(ParseUser.getCurrentUser().getObjectId()) ) {
+                    userFoundInList = true;
+                    break;
+                }
+
+                //Log.i("PostsAdapter", "Looking");
+            }
+            if (userFoundInList) {
+                // user wants to un like, remove user from list
+                post.getUsersFavoritedRelation().remove(ParseUser.getCurrentUser());
+                Log.i("PostsAdapter", "Trying to remove like");
+                post.saveInBackground();
+                btnLike.setBackgroundResource(R.drawable.instagram_heart_unpressed);
+            } else {
+                // user wants to like, put user on list
+                post.getUsersFavoritedRelation().add(ParseUser.getCurrentUser());
+                post.saveInBackground();
+                btnLike.setBackgroundResource(R.drawable.instagram_heart_pressed);
+            }
+
+        }
+
+
         /*
         public String getRelativeTimeAgo(String rawJsonDate) {
             String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
