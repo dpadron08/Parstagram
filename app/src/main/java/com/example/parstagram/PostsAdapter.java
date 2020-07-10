@@ -145,6 +145,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             });
 
 
+            styleLikeButtons(post);
 
             btnLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,7 +180,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 }
             });
 
-            styleLikeButtons(post);
+
 
         }
 
@@ -206,7 +207,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     //Log.i("PostsAdapter", "Attr : " + ((ParseUser)obj.get(1)).getUsername());
 
                     // color buttons
-                    toggleLike(post, listOfUsersFavorited);
+                    boolean userFoundInList = false;
+                    for (ParseObject parseObject : listOfUsersFavorited) {
+                        if (  ((ParseUser)parseObject).getObjectId().equals(ParseUser.getCurrentUser().getObjectId()) ) {
+                            userFoundInList = true;
+                            break;
+                        }
+                    }
+                    if (userFoundInList) {
+                        // user wants to un like, remove user from list
+                        btnLike.setBackgroundResource(R.drawable.instagram_heart_pressed);
+                    } else {
+                        btnLike.setBackgroundResource(R.drawable.instagram_heart_unpressed);
+                    }
+
+
                     /*
                     for (ParseObject a : usersFavoritedList) {
                         Log.i("PostsAdapter", "User liked " + ((ParseUser)a).getUsername());
