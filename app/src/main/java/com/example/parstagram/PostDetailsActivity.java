@@ -35,7 +35,9 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView tvDescription;
 
     Button btnLike;
+    TextView tvLikesCount;
     ArrayList<ParseObject> listOfUsersFavorited = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvDescription);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnLike = findViewById(R.id.btnLike);
+        tvLikesCount = findViewById(R.id.tvLikesCount);
 
         post  = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post"));
 
@@ -143,6 +146,9 @@ public class PostDetailsActivity extends AppCompatActivity {
                     btnLike.setBackgroundResource(R.drawable.instagram_heart_unpressed);
                 }
 
+                // set like count
+                String count = "" + listOfUsersFavorited.size();
+                tvLikesCount.setText(count);
 
             }
         });
@@ -163,11 +169,17 @@ public class PostDetailsActivity extends AppCompatActivity {
             post.getUsersFavoritedRelation().remove(ParseUser.getCurrentUser());
             Log.i("PostsAdapter", "Trying to remove like");
             post.saveInBackground();
+            int count = (listUsers.size() - 1);
+            String count_string = "" + count;
+            tvLikesCount.setText(count_string);
             btnLike.setBackgroundResource(R.drawable.instagram_heart_unpressed);
         } else {
             // user wants to like, put user on list
             post.getUsersFavoritedRelation().add(ParseUser.getCurrentUser());
             post.saveInBackground();
+            int count = (listUsers.size() + 1);
+            String count_string = "" + count;
+            tvLikesCount.setText(count_string);
             btnLike.setBackgroundResource(R.drawable.instagram_heart_pressed);
         }
 

@@ -70,7 +70,7 @@
         android:layout_height="30dp"
         android:layout_margin="12dp"
         android:background="@drawable/instagram_comment_unpressed"
-        app:layout_constraintStart_toEndOf="@+id/btnLike"
+        app:layout_constraintStart_toEndOf="@+id/tvLikesCount"
         app:layout_constraintTop_toBottomOf="@+id/ivImage" />
 
     <Button
@@ -90,4 +90,16 @@
         android:background="@drawable/instagram_save_unpressed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivImage" />
+
+    <TextView
+        android:id="@+id/tvLikesCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="16dp"
+        android:text="0"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintStart_toEndOf="@+id/btnLike"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage"
+        tools:text="0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
