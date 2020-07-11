@@ -1,6 +1,8 @@
 package com.example.parstagram;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostDetailsActivity extends AppCompatActivity {
+    private static final String TAG = "PostDetailsActivity";
 
     Post post;
 
@@ -37,6 +40,11 @@ public class PostDetailsActivity extends AppCompatActivity {
     Button btnLike;
     TextView tvLikesCount;
     ArrayList<ParseObject> listOfUsersFavorited = new ArrayList<>();
+
+    RecyclerView rvComments;
+
+    List<Comment> comments;
+    CommentsAdapter adapter;
 
 
     @Override
@@ -52,9 +60,17 @@ public class PostDetailsActivity extends AppCompatActivity {
         btnLike = findViewById(R.id.btnLike);
         tvLikesCount = findViewById(R.id.tvLikesCount);
 
+        rvComments = findViewById(R.id.rvComments);
+        comments = new ArrayList<>();
+        adapter = new CommentsAdapter(this, comments);
+        rvComments.setAdapter(adapter);
+        rvComments.setLayoutManager(new LinearLayoutManager(this));
+
+
         post  = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post"));
 
-        // populate fields
+
+        // populate fields for image details view
         assert post != null;
         ParseFile image = post.getImage();
         if (image != null) {
@@ -106,6 +122,39 @@ public class PostDetailsActivity extends AppCompatActivity {
             }
         });
         styleLikeButtons();
+        queryComments();
+    }
+
+    private void queryComments() {
+        // clear all existing comments before repopulating, might make infinite scrolling fail
+        adapter.clear();
+        // specify what type of data we want to query
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        query.include(Comment.KEY_POST);
+        query.whereEqualTo(Comment.KEY_POST, post);
+        Log.i(TAG, "Post description : "+post.getDescription());
+        query.addDescendingOrder(Comment.KEY_CREATED_KEY);
+        // start an asynchronous call for comments
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> objects, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting comments", e);
+                    return;
+                }
+
+                Log.i(TAG, "Hi there + comments: "+ objects.size());
+
+                // for debugging purposes let's print every post description to logcat
+                for (Comment comment : objects) {
+                    Log.i(TAG, "Text : " + comment.getText());
+                }
+                comments.addAll(objects);
+                adapter.notifyDataSetChanged();
+
+            }
+        });
     }
 
     private void styleLikeButtons() {
